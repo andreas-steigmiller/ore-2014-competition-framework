@@ -16,8 +16,8 @@ import org.semanticweb.ore.querying.QueryResultData;
 import org.semanticweb.ore.querying.QueryType;
 import org.semanticweb.ore.utilities.FilePathString;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.io.FileDocumentSource;
-import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.MissingImportHandlingStrategy;
@@ -26,11 +26,11 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
@@ -76,7 +76,7 @@ public class QueryResultNormaliserORE implements QueryResultNormaliser {
         }           
         
         if (mConfWriteNormalisedOntologies) {
-    		OWLOntologyFormat owlOntologyFormat = new OWLXMLOntologyFormat();
+    		OWLDocumentFormat owlOntologyFormat = new OWLXMLDocumentFormat();
         	String normalisedResultDataFileString = response.getResultDataFilePathString()+"-normalised.owl.xml";
 	        try {
 				mLogger.info("Saving normalised result data to '{}'.",normalisedResultDataFileString);

@@ -6,8 +6,8 @@ import java.util.Collection;
 
 import org.semanticweb.ore.utilities.FileSystemHandler;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.io.FileDocumentSource;
-import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.model.MissingImportHandlingStrategy;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
@@ -60,7 +60,7 @@ public class OntologyNormalisationGenerator {
 		        OWLOntologyManager managerMerged = OWLManager.createOWLOntologyManager();
 		        OWLDataFactory factoryMerged = managerMerged.getOWLDataFactory();
 		        
-		        OWLOntology mergedOntologie = ontoMerger.createMergedOntology(managerMerged,ontology.getOntologyID().getOntologyIRI()); 
+		        OWLOntology mergedOntologie = ontoMerger.createMergedOntology(managerMerged,ontology.getOntologyID().getOntologyIRI().orNull()); 
 		        for (OWLClass owlClass : mergedOntologie.getClassesInSignature()) {
 		        	OWLDeclarationAxiom decAxiom = factoryMerged.getOWLDeclarationAxiom(owlClass);
 		        	managerMerged.addAxiom(mergedOntologie, decAxiom);		        	
@@ -74,7 +74,7 @@ public class OntologyNormalisationGenerator {
 		        	managerMerged.addAxiom(mergedOntologie, decAxiom);		        	
 		        }
 		        
-		        OWLXMLOntologyFormat owlOntologyFormat = new OWLXMLOntologyFormat();
+		        OWLXMLDocumentFormat owlOntologyFormat = new OWLXMLDocumentFormat();
 		        manager.saveOntology(mergedOntologie,owlOntologyFormat,new FileOutputStream(new File(ontologyOutputFileString)));
 		        
 		        mLogger.info("Saved normalised ontology to '{}'.",ontologyFileString);

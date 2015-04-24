@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.io.OWLFunctionalSyntaxOntologyFormat;
+import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -76,8 +76,8 @@ public class OREv2ReasonerWrapper {
 		OWLReasoner reasoner = createReasoner();
 		try {
 			reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
-			Set<OWLSubClassOfAxiom> subClassAxioms = subClassGenerator.createAxioms(manager, reasoner);
-			Set<OWLEquivalentClassesAxiom> equivClassAxioms = equivClassGenerator.createAxioms(manager, reasoner);
+			Set<OWLSubClassOfAxiom> subClassAxioms = subClassGenerator.createAxioms(manager.getOWLDataFactory(), reasoner);
+			Set<OWLEquivalentClassesAxiom> equivClassAxioms = equivClassGenerator.createAxioms(manager.getOWLDataFactory(), reasoner);
 			resultAxioms.addAll(subClassAxioms);
 			resultAxioms.addAll(equivClassAxioms);
 		} catch (InconsistentOntologyException e) {		
@@ -112,7 +112,7 @@ public class OREv2ReasonerWrapper {
 		Set<? extends OWLAxiom> resultAxioms = null;
 		try {
 			reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS);
-			resultAxioms = classAssertionGenerator.createAxioms(manager, reasoner);
+			resultAxioms = classAssertionGenerator.createAxioms(manager.getOWLDataFactory(), reasoner);
 		} catch (InconsistentOntologyException e) {		
 			OWLDataFactory factory = manager.getOWLDataFactory();
 			resultAxioms = Collections.singleton(factory.getOWLSubClassOfAxiom(factory.getOWLThing(), factory.getOWLNothing()));
@@ -240,7 +240,7 @@ public class OREv2ReasonerWrapper {
 		}
 		IRI iri = IRI.create("file:" + outputFile.getAbsolutePath());
 		try {
-			manager.saveOntology(manager.createOntology(results, iri), new OWLFunctionalSyntaxOntologyFormat(), new FileOutputStream(outputFile));
+			manager.saveOntology(manager.createOntology(results, iri), new FunctionalSyntaxDocumentFormat(), new FileOutputStream(outputFile));
 		} catch (Exception e) {
 			writeError(e.toString());
 			writeError(e.getStackTrace().toString());
