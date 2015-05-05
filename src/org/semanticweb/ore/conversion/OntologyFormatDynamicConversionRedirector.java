@@ -11,15 +11,15 @@ import org.semanticweb.ore.utilities.FilePathString;
 import org.semanticweb.ore.utilities.FileSystemHandler;
 import org.semanticweb.ore.utilities.RelativeFilePathStringType;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
+import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.io.FileDocumentSource;
 import org.semanticweb.owlapi.io.FileDocumentTarget;
-import org.semanticweb.owlapi.io.OWLFunctionalSyntaxOntologyFormat;
-import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.MissingImportHandlingStrategy;
+import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -90,13 +90,13 @@ public class OntologyFormatDynamicConversionRedirector implements OntologyFormat
 	protected boolean convertOntologyIntoFormat(String sourceString, String destinationString, OntologyFormatType ontologyFormat) {
 		boolean converted = false;
 		
-		OWLOntologyFormat owlOntologyFormat = null;
+		OWLDocumentFormat owlOntologyFormat = null;
         if (ontologyFormat == OntologyFormatType.ONTOLOGY_FORMAT_OWL2XML) {
-        	owlOntologyFormat = new OWLXMLOntologyFormat();
+        	owlOntologyFormat = new OWLXMLDocumentFormat();
         } else if (ontologyFormat == OntologyFormatType.ONTOLOGY_FORMAT_OWL2FUNCTIONAL) {
-        	owlOntologyFormat = new OWLFunctionalSyntaxOntologyFormat();
+        	owlOntologyFormat = new FunctionalSyntaxDocumentFormat();
         } else if (ontologyFormat == OntologyFormatType.ONTOLOGY_FORMAT_OWL2RDFXML) {
-        	owlOntologyFormat = new RDFXMLOntologyFormat();
+        	owlOntologyFormat = new RDFXMLDocumentFormat();
         }	
         
         
@@ -122,7 +122,7 @@ public class OntologyFormatDynamicConversionRedirector implements OntologyFormat
 	        
 	        OWLOntologyManager managerMerged = OWLManager.createOWLOntologyManager();
 	        
-	        OWLOntology mergedOntologie = ontoMerger.createMergedOntology(managerMerged,ontology.getOntologyID().getOntologyIRI()); 
+	        OWLOntology mergedOntologie = ontoMerger.createMergedOntology(managerMerged,ontology.getOntologyID().getOntologyIRI().orNull()); 
 	        
 	        manager.saveOntology(mergedOntologie,owlOntologyFormat,new FileOutputStream(new File(destinationString)));
 	        

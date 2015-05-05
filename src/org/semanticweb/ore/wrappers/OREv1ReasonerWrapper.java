@@ -9,8 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.semanticweb.owlapi.io.FileDocumentTarget;
-import org.semanticweb.owlapi.io.OWLFunctionalSyntaxOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -63,7 +63,7 @@ public class OREv1ReasonerWrapper {
 		long start = bean.getCurrentThreadCpuTime();
 		long start_wc = System.nanoTime();
 		
-		Set<OWLSubClassOfAxiom> result = gen.createAxioms(man, createReasoner());
+		Set<OWLSubClassOfAxiom> result = gen.createAxioms(man.getOWLDataFactory(), createReasoner());
 		
 		long end = bean.getCurrentThreadCpuTime();
 		long end_wc = System.nanoTime();
@@ -171,7 +171,7 @@ public class OREv1ReasonerWrapper {
 		try {
 //			man.saveOntology(man.createOntology((Set<OWLAxiom>) results, iri), new OWLFunctionalSyntaxOntologyFormat(), iri);
 
-			man.saveOntology(man.createOntology((Set<OWLAxiom>) results, iri), new OWLFunctionalSyntaxOntologyFormat(), new FileDocumentTarget(new File(outFile)));
+			man.saveOntology(man.createOntology((Set<OWLAxiom>) results, iri), new FunctionalSyntaxDocumentFormat(), new FileDocumentTarget(new File(outFile)));
 		} catch (OWLOntologyStorageException e) {
 			errorLog += e.getStackTrace();
 		} catch (OWLOntologyCreationException e) {
